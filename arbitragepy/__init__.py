@@ -29,3 +29,17 @@ def is_compatible_quantity_increments(qty_inc1: Decimal, qty_inc2: Decimal) -> b
     """
 
     return qty_inc1 % qty_inc2 == 0 or qty_inc2 % qty_inc1 == 0
+
+
+def plus_fee(n: Decimal, fee: Decimal) -> Decimal:
+    """Returns the number from which, if you subtract the `fee` percent, you get `n`
+
+    Args:
+        n (Decimal)
+        fee (Decimal): fee in percent which greater than 0
+
+    Returns:
+        Decimal
+    """
+
+    return n / (1 - fee / 100)

@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from arbitragepy import get_spread, is_compatible_quantity_increments
+from arbitragepy import get_spread, is_compatible_quantity_increments, plus_fee
 
 
 def test_get_spread() -> None:
@@ -30,3 +30,8 @@ def test_is_compatible_quantity_increments() -> None:
 
     assert not is_compatible_quantity_increments(Decimal("5"), Decimal("3"))
     assert not is_compatible_quantity_increments(Decimal("3"), Decimal("5"))
+
+
+def test_plus_fee() -> None:
+    assert plus_fee(Decimal(100), Decimal(50)) == Decimal(200)
+    assert plus_fee(Decimal(70), Decimal(30)) == Decimal(100)
