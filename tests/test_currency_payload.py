@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from arbitragepy import CurrencyPayload
+from arbitrageutils import CurrencyPayload
 
 
 def test_currency_payload() -> None:
