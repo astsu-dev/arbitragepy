@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from .exchange_payload import ExchangePayload
+from .currency_payload import CurrencyPayload
 
 
 def get_spread(ask_price: Decimal, bid_price: Decimal) -> Decimal:

@@ -1,10 +1,10 @@
 from decimal import Decimal
 
-from arbitragepy import ExchangePayload
+from arbitragepy import CurrencyPayload
 
 
-def test_exchange_payload() -> None:
-    p = ExchangePayload(
+def test_currency_payload() -> None:
+    p = CurrencyPayload(
         price=Decimal("100.15"),
         quantity=Decimal("200.002"),
         quantity_increment=Decimal("0.001"))
@@ -13,12 +13,15 @@ def test_exchange_payload() -> None:
     assert p.quantity_increment == Decimal("0.001")
     assert p.min_quantity == Decimal("0")
     assert p.commission == Decimal("0")
+    assert not p.ask_commission_in_current_currency
 
-    p = ExchangePayload(
+    p = CurrencyPayload(
         price=Decimal("100.15"),
         quantity=Decimal("200.002"),
         quantity_increment=Decimal("0.001"),
         min_quantity=Decimal("1.10"),
-        commission=Decimal("1"))
+        commission=Decimal("1"),
+        ask_commission_in_current_currency=True)
     assert p.min_quantity == Decimal("1.10")
     assert p.commission == Decimal("1")
+    assert p.ask_commission_in_current_currency
