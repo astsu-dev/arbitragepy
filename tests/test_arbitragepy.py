@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from arbitragepy import (get_spread, is_compatible_quantity_increments,
-                         minus_fee, plus_fee)
+                         minus_fee, plus_fee, to_compatible_quantity_increment)
 
 
 def test_get_spread() -> None:
@@ -31,6 +31,15 @@ def test_is_compatible_quantity_increments() -> None:
 
     assert not is_compatible_quantity_increments(Decimal("5"), Decimal("3"))
     assert not is_compatible_quantity_increments(Decimal("3"), Decimal("5"))
+
+
+def test_to_compatible_quantity_increment() -> None:
+    assert to_compatible_quantity_increment(
+        Decimal("15"), Decimal("6")) == Decimal("12")
+    assert to_compatible_quantity_increment(
+        Decimal("15"), Decimal("3")) == Decimal("15")
+    assert to_compatible_quantity_increment(
+        Decimal("20"), Decimal("7")) == Decimal("14")
 
 
 def test_plus_fee() -> None:
