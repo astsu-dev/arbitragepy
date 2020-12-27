@@ -2,7 +2,7 @@ from decimal import Decimal
 
 
 def plus_fee(n: Decimal, fee: Decimal) -> Decimal:
-    """Returns the number from which, if you subtract the `fee` percent, you get `n`
+    """Returns the number from which, if you subtract the `fee` percent, you get `n`.
 
     Args:
         n (Decimal)
@@ -16,7 +16,7 @@ def plus_fee(n: Decimal, fee: Decimal) -> Decimal:
 
 
 def minus_fee(n: Decimal, fee: Decimal) -> Decimal:
-    """Returns the number to which, if you add the `fee` percent, you get `n`
+    """Returns the number to which, if you add the `fee` percent, you get `n`.
 
     Args:
         n (Decimal)
