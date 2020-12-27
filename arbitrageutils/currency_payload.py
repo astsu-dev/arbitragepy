@@ -11,13 +11,13 @@ class CurrencyPayload:
         quantity (Decimal): currency quantity
         quantity_increment (Decimal): quantity increment step
         min_quantity (Decimal): min currency quantity
-        commission (Decimal): currency ask/bid commission in percent
-        ask_commission_in_current_currency (bool)
+        fee (Decimal): currency ask/bid fee in percent
+        ask_fee_in_current_currency (bool)
     """
 
     price: Decimal
     quantity: Decimal
     quantity_increment: Decimal
     min_quantity: Decimal = Decimal("0")
-    commission: Decimal = Decimal("0")
-    ask_commission_in_current_currency: bool = False
+    fee: Decimal = Decimal("0")
+    ask_fee_in_current_currency: bool = False
