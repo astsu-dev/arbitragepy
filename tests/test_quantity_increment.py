@@ -33,3 +33,6 @@ def test_to_compatible_quantity_increment() -> None:
         Decimal("15"), Decimal("3")) == Decimal("15")
     assert to_compatible_quantity_increment(
         Decimal("20"), Decimal("7")) == Decimal("14")
+
+
+# TODO Test validate_quantity_increments.
