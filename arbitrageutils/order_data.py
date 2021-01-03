@@ -22,6 +22,7 @@ class OrdersData:
     ask: OrderData
     bid: OrderData
     spread: Decimal
+    profit: Decimal
 
 
 @dataclass(frozen=True)
