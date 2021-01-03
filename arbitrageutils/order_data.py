@@ -118,6 +118,7 @@ def create_bid_order_data(order_payload: OrderPayload) -> OrderData:
 
     qty = to_compatible_quantity_increment(qty, qty_inc)
 
-    estimated_value = plus_fee(qty * price, fee)
+    estimated_value = qty * price
+    estimated_value -= estimated_value * fee / 100
 
     return OrderData(price=price, quantity=qty, estimated_value=estimated_value)
