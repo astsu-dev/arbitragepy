@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "arbitragepy"
-version = "0.0.1"
+name = "arbitrageutils"
+version = "0.1.0"
 description = ""
 authors = ["astsu <you@example.com>"]
 
