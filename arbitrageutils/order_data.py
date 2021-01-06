@@ -51,9 +51,9 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
         ask_qty_inc = ask_cp_qty_inc
         bid_qty_inc = bid_cp_qty_inc
 
-    ask_quantity = bid_quantity = min(
-        ask_currency_payload.quantity, ask_currency_payload.min_quantity,
-        bid_currency_payload.quantity, bid_currency_payload.min_quantity)
+    ask_quantity = bid_quantity = max(
+        min(ask_currency_payload.quantity, bid_currency_payload.quantity),
+        ask_currency_payload.min_quantity, bid_currency_payload.min_quantity)
 
     ask_order_payload = OrderPayload(
         ask_price, ask_quantity, ask_qty_inc, ask_currency_payload.fee,
@@ -65,8 +65,9 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
     ask_order_data = create_ask_order_data(ask_order_payload)
     bid_order_data = create_bid_order_data(bid_order_payload)
     spread = get_spread(ask_price, bid_price)
+    profit = bid_order_data.estimated_value - ask_order_data.estimated_value
 
-    return OrdersData(ask_order_data, bid_order_data, spread)
+    return OrdersData(ask=ask_order_data, bid=bid_order_data, spread=spread, profit=profit)
 
 
 def create_ask_order_data(order_payload: OrderPayload) -> OrderData:
