@@ -4,7 +4,7 @@ from .exceptions import ImcompabileQuantityIncrementsError
 
 
 def is_compatible_quantity_increments(qty_inc1: Decimal, qty_inc2: Decimal) -> bool:
-    """Returns True if `qty_inc1` % `qty_inc2` == 0 or `qty_inc2` % `qty_inc1` == 0
+    """Returns True if `qty_inc1` % `qty_inc2` == 0 or `qty_inc2` % `qty_inc1` == 0.
 
     Args:
         qty_inc1 (Decimal)
@@ -18,7 +18,7 @@ def is_compatible_quantity_increments(qty_inc1: Decimal, qty_inc2: Decimal) -> b
 
 
 def to_compatible_quantity_increment(n: Decimal, qty_inc: Decimal) -> Decimal:
-    """Converts `n` to number which devided on `qty_inc`.
+    """Converts `n` to number which divided on `qty_inc`.
 
     Args:
         n (Decimal)
@@ -36,6 +36,8 @@ def validate_quantity_increments(qty_inc1: Decimal,
                                  ) -> None:
     """Validates quantity increments.
 
+    Raises ImcompabileQuantityIncrementsError if quantity increments are imcompatible, otherwise do nothing.
+
     Args:
         qty_inc1 (Decimal)
         qty_inc2 (Decimal)
@@ -45,5 +47,4 @@ def validate_quantity_increments(qty_inc1: Decimal,
     """
 
     if not is_compatible_quantity_increments(qty_inc1, qty_inc2):
-        raise ImcompabileQuantityIncrementsError(
-            qty_inc1, qty_inc2)
+        raise ImcompabileQuantityIncrementsError

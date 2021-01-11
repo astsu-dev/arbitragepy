@@ -1,7 +1,9 @@
 from decimal import Decimal
 
-from arbitrageutils import (is_compatible_quantity_increments,
-                            to_compatible_quantity_increment)
+from arbitrageutils import (ImcompabileQuantityIncrementsError,
+                            is_compatible_quantity_increments,
+                            to_compatible_quantity_increment,
+                            validate_quantity_increments)
 
 
 def test_is_compatible_quantity_increments() -> None:
@@ -35,4 +37,15 @@ def test_to_compatible_quantity_increment() -> None:
         Decimal("20"), Decimal("7")) == Decimal("14")
 
 
-# TODO Test validate_quantity_increments.
+def test_validate_quantity_increments() -> None:
+    try:
+        validate_quantity_increments(Decimal("15"), Decimal("13"))
+    except ImcompabileQuantityIncrementsError:
+        ...
+    else:
+        assert False
+
+    try:
+        validate_quantity_increments(Decimal("20"), Decimal("40"))
+    except ImcompabileQuantityIncrementsError:
+        assert False
