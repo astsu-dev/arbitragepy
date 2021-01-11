@@ -12,7 +12,7 @@ class CurrencyPayload:
         quantity_increment (Decimal): quantity increment step
         min_quantity (Decimal): min currency quantity
         fee (Decimal): currency ask/bid fee in percent
-        ask_fee_in_current_currency (bool)
+        ask_fee_in_base_currency (bool)
     """
 
     price: Decimal
@@ -20,4 +20,4 @@ class CurrencyPayload:
     quantity_increment: Decimal
     min_quantity: Decimal = Decimal("0")
     fee: Decimal = Decimal("0")
-    ask_fee_in_current_currency: bool = False
+    ask_fee_in_base_currency: bool = False

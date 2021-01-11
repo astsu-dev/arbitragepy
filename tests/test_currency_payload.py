@@ -13,7 +13,7 @@ def test_currency_payload() -> None:
     assert p.quantity_increment == Decimal("0.001")
     assert p.min_quantity == Decimal("0")
     assert p.fee == Decimal("0")
-    assert not p.ask_fee_in_current_currency
+    assert not p.ask_fee_in_base_currency
 
     p = CurrencyPayload(
         price=Decimal("100.15"),
@@ -21,7 +21,7 @@ def test_currency_payload() -> None:
         quantity_increment=Decimal("0.001"),
         min_quantity=Decimal("1.10"),
         fee=Decimal("1"),
-        ask_fee_in_current_currency=True)
+        ask_fee_in_base_currency=True)
     assert p.min_quantity == Decimal("1.10")
     assert p.fee == Decimal("1")
-    assert p.ask_fee_in_current_currency
+    assert p.ask_fee_in_base_currency

@@ -32,15 +32,15 @@ def test_order_payload() -> None:
     assert op.quantity == Decimal("1200")
     assert op.quantity_increment == Decimal("20")
     assert op.fee == Decimal("5")
-    assert not op.ask_fee_in_current_currency
+    assert not op.ask_fee_in_base_currency
 
     op = OrderPayload(price=Decimal("14.5"), quantity=Decimal("1200"), quantity_increment=Decimal(
-        "20"), fee=Decimal("5"), ask_fee_in_current_currency=True)
+        "20"), fee=Decimal("5"), ask_fee_in_base_currency=True)
     assert op.price == Decimal("14.5")
     assert op.quantity == Decimal("1200")
     assert op.quantity_increment == Decimal("20")
     assert op.fee == Decimal("5")
-    assert op.ask_fee_in_current_currency
+    assert op.ask_fee_in_base_currency
 
 
 def test_create_ask_order_data() -> None:
@@ -52,7 +52,7 @@ def test_create_ask_order_data() -> None:
     assert od.estimated_value == Decimal("18010.52631578947368421052632")
 
     op = OrderPayload(price=Decimal("14.5"), quantity=Decimal("1199"), quantity_increment=Decimal(
-        "20"), fee=Decimal("5"), ask_fee_in_current_currency=True)
+        "20"), fee=Decimal("5"), ask_fee_in_base_currency=True)
     od = create_ask_order_data(op)
     assert od.price == Decimal("14.5")
     assert od.quantity == Decimal("1240")
@@ -85,7 +85,7 @@ def test_create_orders_data() -> None:
 
     # Ask fee in base currency
     ask_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
-        "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"), ask_fee_in_current_currency=True)
+        "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"), ask_fee_in_base_currency=True)
     bid_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
         "1199"), quantity_increment=Decimal("40"), fee=Decimal("5"))
     orders_data = create_orders_data(

@@ -29,7 +29,7 @@ class OrderPayload:
     quantity: Decimal
     quantity_increment: Decimal
     fee: Decimal
-    ask_fee_in_current_currency: bool = False
+    ask_fee_in_base_currency: bool = False
 
 
 def create_orders_data(*, ask_currency_payload: CurrencyPayload,
@@ -70,10 +70,10 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
 
     ask_order_payload = OrderPayload(
         ask_price, ask_quantity, ask_qty_inc, ask_currency_payload.fee,
-        ask_currency_payload.ask_fee_in_current_currency)
+        ask_currency_payload.ask_fee_in_base_currency)
     bid_order_payload = OrderPayload(
         bid_price, bid_quantity, bid_qty_inc, bid_currency_payload.fee,
-        bid_currency_payload.ask_fee_in_current_currency)
+        bid_currency_payload.ask_fee_in_base_currency)
 
     ask_order_data = create_ask_order_data(ask_order_payload)
     bid_order_data = create_bid_order_data(bid_order_payload)
@@ -105,7 +105,7 @@ def create_ask_order_data(order_payload: OrderPayload) -> OrderData:
 
     qty = to_compatible_quantity_increment(qty, qty_inc)
 
-    if order_payload.ask_fee_in_current_currency:
+    if order_payload.ask_fee_in_base_currency:
         qty = to_compatible_quantity_increment(
             plus_fee(qty, fee), qty_inc)
         estimated_value = qty * price
