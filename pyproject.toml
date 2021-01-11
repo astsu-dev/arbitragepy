@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arbitrageutils"
 version = "0.1.0"
-description = ""
+description = "Arbitrage utilities. Has functions that make it easy to work with arbitrage mathematics."
 authors = ["astsu <you@example.com>"]
 
 [tool.poetry.dependencies]
