@@ -1,3 +1,5 @@
+"""Has functions for work with orders."""
+
 from dataclasses import dataclass
 from decimal import Decimal
 

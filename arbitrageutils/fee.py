@@ -1,3 +1,5 @@
+"""Has functions for work with fees."""
+
 from decimal import Decimal
 
 

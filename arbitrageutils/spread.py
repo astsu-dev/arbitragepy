@@ -1,3 +1,5 @@
+"""Has functions to work with spread."""
+
 from decimal import Decimal
 
 

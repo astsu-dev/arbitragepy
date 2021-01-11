@@ -1,3 +1,5 @@
+"""Has functions for work with quantity increments."""
+
 from decimal import Decimal
 
 from .exceptions import ImcompabileQuantityIncrementsError

@@ -1,3 +1,5 @@
+"""Has functions that make it easy to work with arbitrage mathematics."""
+
 from .currency_payload import CurrencyPayload
 from .exceptions import ImcompabileQuantityIncrementsError
 from .fee import minus_fee, plus_fee
