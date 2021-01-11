@@ -10,6 +10,14 @@ from .spread import get_spread
 
 @dataclass(frozen=True)
 class OrderData:
+    """Has data of ready for arbitrage order.
+
+    Args:
+        price (Decimal): currency price.
+        quantity (Decimal): currency quantity.
+        estimated_value (Decimal): currency estimated value in quote currency.
+    """
+
     price: Decimal
     quantity: Decimal
     estimated_value: Decimal
@@ -17,6 +25,15 @@ class OrderData:
 
 @dataclass(frozen=True)
 class OrdersData:
+    """Has data of ready for arbitrage bid and ask orders and spread, profit between them.
+
+    Args:
+        ask (OrderData): ask order data.
+        bid (OrderData): bid order data.
+        spread (OrderData): clear spread between ask and bid orders.
+        profit (OrderData): clear profit between ask and bid orders.
+    """
+
     ask: OrderData
     bid: OrderData
     spread: Decimal
@@ -25,6 +42,16 @@ class OrdersData:
 
 @dataclass(frozen=True)
 class OrderPayload:
+    """Has data from order from exchange: price, quantity, quantity_increment, fee.
+
+    Args:
+        price (Decimal): currency price.
+        quantity (Decimal): currency quantity.
+        quantity_increment (Decimal): currency quantity increment.
+        fee (Decimal): currency fee.
+        ask_fee_in_base_currency (bool): True if exchange take fee in base currency.
+    """
+
     price: Decimal
     quantity: Decimal
     quantity_increment: Decimal
