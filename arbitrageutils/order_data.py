@@ -2,10 +2,8 @@ from dataclasses import dataclass
 from decimal import Decimal
 
 from .currency_payload import CurrencyPayload
-from .exceptions import ImcompabileQuantityIncrementsError
-from .fee import minus_fee, plus_fee
-from .quantity_increment import (is_compatible_quantity_increments,
-                                 to_compatible_quantity_increment,
+from .fee import plus_fee
+from .quantity_increment import (to_compatible_quantity_increment,
                                  validate_quantity_increments)
 from .spread import get_spread
 
@@ -38,6 +36,21 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
                        bid_currency_payload: CurrencyPayload,
                        make_compatible_quantity_increments: bool = True
                        ) -> OrdersData:
+    """Creates ask and bid orders data.
+
+    Calculates spread, profit between ask and bid orders.
+    Selects min currency quantity from ask and bid orders.
+
+    Args:
+        ask_currency_payload (CurrencyPayload): ask payload
+        bid_currency_payload (CurrencyPayload): bid_payload
+        make_compatible_quantity_increments (bool, optional): if True will be chosen 
+            max quantity increment from ask and bid for ask and bid. Defaults to True.
+
+    Returns:
+        OrdersData
+    """
+
     ask_price = ask_currency_payload.price
     bid_price = bid_currency_payload.price
     ask_cp_qty_inc = ask_currency_payload.quantity_increment
@@ -45,7 +58,7 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
 
     if make_compatible_quantity_increments:
         validate_quantity_increments(ask_cp_qty_inc, bid_cp_qty_inc)
-        ask_qty_inc = bid_qty_inc = min(
+        ask_qty_inc = bid_qty_inc = max(
             ask_cp_qty_inc, bid_cp_qty_inc)
     else:
         ask_qty_inc = ask_cp_qty_inc
@@ -64,8 +77,10 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
 
     ask_order_data = create_ask_order_data(ask_order_payload)
     bid_order_data = create_bid_order_data(bid_order_payload)
-    spread = get_spread(ask_price, bid_price)
-    profit = bid_order_data.estimated_value - ask_order_data.estimated_value
+    ask_estimated_value = ask_order_data.estimated_value
+    bid_estimated_value = bid_order_data.estimated_value
+    spread = get_spread(ask_estimated_value, bid_estimated_value)
+    profit = bid_estimated_value - ask_estimated_value
 
     return OrdersData(ask=ask_order_data, bid=bid_order_data, spread=spread, profit=profit)
 

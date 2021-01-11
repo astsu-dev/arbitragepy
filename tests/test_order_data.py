@@ -1,7 +1,8 @@
 from decimal import Decimal
 
-from arbitrageutils import (CurrencyPayload, OrderData, OrderPayload,
-                            OrdersData, create_ask_order_data,
+from arbitrageutils import (CurrencyPayload,
+                            ImcompabileQuantityIncrementsError, OrderData,
+                            OrderPayload, OrdersData, create_ask_order_data,
                             create_bid_order_data, create_orders_data)
 
 
@@ -68,16 +69,57 @@ def test_create_bid_order_data() -> None:
 
 
 def test_create_orders_data() -> None:
+    # Ask fee in quote currency
     ask_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
         "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"))
     bid_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
-        "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"))
+        "1199"), quantity_increment=Decimal("40"), fee=Decimal("5"))
     orders_data = create_orders_data(
         ask_currency_payload=ask_cp, bid_currency_payload=bid_cp)
     assert orders_data.ask == OrderData(price=Decimal("14.5"), quantity=Decimal(
+        "1160"), estimated_value=Decimal("17705.26315789473684210526316"))
+    assert orders_data.bid == OrderData(price=Decimal(
+        "14.5"), quantity=Decimal("1160"), estimated_value=Decimal("15979"))
+    assert orders_data.spread == Decimal("-9.75000000000000000000000001")
+    assert orders_data.profit == Decimal("-1726.26315789473684210526316")
+
+    # Ask fee in base currency
+    ask_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
+        "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"), ask_fee_in_current_currency=True)
+    bid_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
+        "1199"), quantity_increment=Decimal("40"), fee=Decimal("5"))
+    orders_data = create_orders_data(
+        ask_currency_payload=ask_cp, bid_currency_payload=bid_cp)
+    assert orders_data.ask == OrderData(price=Decimal("14.5"), quantity=Decimal(
+        "1200"), estimated_value=Decimal("17400"))
+    assert orders_data.bid == OrderData(price=Decimal(
+        "14.5"), quantity=Decimal("1160"), estimated_value=Decimal("15979"))
+    assert orders_data.spread == Decimal("-8.166666666666666666666666670")
+    assert orders_data.profit == Decimal("-1421")
+
+    # Not make compatible quantity increments
+    ask_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
+        "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"))
+    bid_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
+        "1199"), quantity_increment=Decimal("40"), fee=Decimal("5"))
+    orders_data = create_orders_data(
+        ask_currency_payload=ask_cp, bid_currency_payload=bid_cp, make_compatible_quantity_increments=False)
+    assert orders_data.ask == OrderData(price=Decimal("14.5"), quantity=Decimal(
         "1180"), estimated_value=Decimal("18010.52631578947368421052632"))
     assert orders_data.bid == OrderData(price=Decimal(
-        "14.5"), quantity=Decimal("1180"), estimated_value=Decimal("16254.5"))
-    assert orders_data.spread == Decimal("0")
-    assert orders_data.profit == Decimal(
-        "16254.5") - Decimal("18010.52631578947368421052632")
+        "14.5"), quantity=Decimal("1160"), estimated_value=Decimal("15979"))
+    assert orders_data.spread == Decimal("-11.27966101694915254237288138")
+    assert orders_data.profit == Decimal("-2031.52631578947368421052632")
+
+    ask_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
+        "1199"), quantity_increment=Decimal("15"), fee=Decimal("5"))
+    bid_cp = CurrencyPayload(price=Decimal("14.5"), quantity=Decimal(
+        "1199"), quantity_increment=Decimal("20"), fee=Decimal("5"))
+
+    try:
+        create_orders_data(ask_currency_payload=ask_cp,
+                           bid_currency_payload=bid_cp)
+    except ImcompabileQuantityIncrementsError:
+        ...
+    else:
+        assert False
