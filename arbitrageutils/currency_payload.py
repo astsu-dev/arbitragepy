@@ -4,15 +4,15 @@ from decimal import Decimal
 
 @dataclass(frozen=True)
 class CurrencyPayload:
-    """This dataclass represents exchange currency data for arbitrage comparison.
+    """Has data from order from exchange and about currency.
 
     Args:
-        price (Decimal): currency price
-        quantity (Decimal): currency quantity
-        quantity_increment (Decimal): quantity increment step
-        min_quantity (Decimal): min currency quantity
-        fee (Decimal): currency ask/bid fee in percent
-        ask_fee_in_base_currency (bool)
+        price (Decimal): currency price.
+        quantity (Decimal): currency quantity.
+        quantity_increment (Decimal): quantity increment.
+        min_quantity (Decimal): min currency quantity.
+        fee (Decimal): currency ask/bid fee in percent.
+        ask_fee_in_base_currency (bool): True if exchange takes fee in base currency.
     """
 
     price: Decimal

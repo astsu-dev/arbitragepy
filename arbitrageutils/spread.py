@@ -2,7 +2,7 @@ from decimal import Decimal
 
 
 def get_spread(ask_price: Decimal, bid_price: Decimal) -> Decimal:
-    """Returns spread percent between `ask_price` and `bid_price` prices.
+    """Returns spread in percent between `ask_price` and `bid_price` prices.
 
     Args:
         ask_price (Decimal): price for buy

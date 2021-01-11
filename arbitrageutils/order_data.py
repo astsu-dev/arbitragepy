@@ -49,7 +49,7 @@ class OrderPayload:
         quantity (Decimal): currency quantity.
         quantity_increment (Decimal): currency quantity increment.
         fee (Decimal): currency fee.
-        ask_fee_in_base_currency (bool): True if exchange take fee in base currency.
+        ask_fee_in_base_currency (bool): True if exchange takes fee in base currency.
     """
 
     price: Decimal
@@ -69,8 +69,8 @@ def create_orders_data(*, ask_currency_payload: CurrencyPayload,
     Selects min currency quantity from ask and bid orders.
 
     Args:
-        ask_currency_payload (CurrencyPayload): ask payload
-        bid_currency_payload (CurrencyPayload): bid_payload
+        ask_currency_payload (CurrencyPayload): ask currency payload.
+        bid_currency_payload (CurrencyPayload): bid currency payload.
         make_compatible_quantity_increments (bool, optional): if True will be chosen 
             max quantity increment from ask and bid for ask and bid. Defaults to True.
 

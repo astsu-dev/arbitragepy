@@ -4,7 +4,7 @@ from .exceptions import ImcompabileQuantityIncrementsError
 
 
 def is_compatible_quantity_increments(qty_inc1: Decimal, qty_inc2: Decimal) -> bool:
-    """Returns True if `qty_inc1` % `qty_inc2` == 0 or `qty_inc2` % `qty_inc1` == 0.
+    """Returns True if `qty_inc1` divided by `qty_inc2` or `qty_inc2` divided by `qty_inc1`.
 
     Args:
         qty_inc1 (Decimal)
