@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from arbitrageutils import get_spread
+from arbitragepy.spread import get_spread
 
 
 def test_get_spread() -> None:

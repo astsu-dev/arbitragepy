@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from arbitrageutils import minus_fee, plus_fee
+from arbitragepy.fee import minus_fee, plus_fee
 
 
 def test_plus_fee() -> None:

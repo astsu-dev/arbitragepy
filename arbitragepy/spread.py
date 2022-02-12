@@ -1,5 +1,3 @@
-"""Has functions to work with spread."""
-
 from decimal import Decimal
 
 
@@ -8,7 +6,7 @@ def get_spread(ask_price: Decimal, bid_price: Decimal) -> Decimal:
 
     Args:
         ask_price (Decimal): price for buy
-        bid_price (Decimal): price for bought
+        bid_price (Decimal): price for sell
 
     Returns:
         Decimal
