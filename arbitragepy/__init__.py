@@ -37,3 +37,4 @@ __all__ = [
     "validate_quantity_increments",
     "get_spread",
 ]
+__version__ = "1.0.0"
