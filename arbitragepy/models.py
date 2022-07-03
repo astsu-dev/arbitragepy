@@ -8,16 +8,16 @@ class SymbolInfo:
 
     Args:
         quantity_increment: step size for currency quantity in order.
-        fee: fee in percent. Defaults to 0.
         min_quantity: min quantity of currency in order. Defaults to 0.
+        max_quantity: max quantity of currency in order. Defaults to infinity.
         min_notional: min value of quantity * price. Defaults to 0.
         fee_in_base_currency: True if fee after purchase
             will be taken in the base currency. Defaults to False.
     """
 
     quantity_increment: Decimal
-    fee: Decimal = Decimal(0)
     min_quantity: Decimal = Decimal(0)
+    max_quantity: Decimal = Decimal("inf")
     min_notional: Decimal = Decimal(0)
     fee_in_base_currency: bool = False
 
@@ -46,11 +46,13 @@ class ArbitragePayload:
         order: info about order.
         balance: if ask exchnage then balance of symbol quote currency.
             If bid exchange then balance of symbol base currency.
+        fee: fee in percent. Defaults to 0.
     """
 
     symbol: SymbolInfo
     order: OrderInfo
     balance: Decimal | None = None
+    fee: Decimal = Decimal(0)
 
 
 @dataclass(frozen=True)

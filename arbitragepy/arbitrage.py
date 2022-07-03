@@ -47,8 +47,8 @@ def arbitrage(
 
     ask_price = ask.order.price
     bid_price = bid.order.price
-    ask_fee = ask.symbol.fee
-    bid_fee = bid.symbol.fee
+    ask_fee = ask.fee
+    bid_fee = bid.fee
     ask_qty_inc = ask.symbol.quantity_increment
     bid_qty_inc = bid.symbol.quantity_increment
     ask_balance = ask.balance
@@ -59,8 +59,13 @@ def arbitrage(
         validate_quantity_increments(ask_qty_inc, bid_qty_inc)
         ask_qty_inc = bid_qty_inc = max(ask_qty_inc, bid_qty_inc)
 
-    # Select lowest order quantity among ask and bid orders
-    ask_quantity = bid_quantity = min(ask.order.quantity, bid.order.quantity)
+    # Select lowest order quantity among ask, bid orders and max quantity limit
+    ask_quantity = bid_quantity = min(
+        ask.order.quantity,
+        bid.order.quantity,
+        ask.symbol.max_quantity,
+        bid.symbol.max_quantity,
+    )
     ask_quantity = to_compatible_quantity_increment(ask_quantity, ask_qty_inc)
     bid_quantity = to_compatible_quantity_increment(bid_quantity, bid_qty_inc)
 

@@ -34,14 +34,16 @@ from arbitragepy import (
 
 
 ask_payload = ArbitragePayload(
-    symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
+    symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
     order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
     balance=Decimal("200"),
+    fee=Decimal("0.1")
 )
 bid_payload = ArbitragePayload(
-    symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
+    symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
     order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
     balance=Decimal("65"),
+    fee=Decimal("0.1")
 )
 
 result = arbitrage(ask=ask_payload, bid=bid_payload)
