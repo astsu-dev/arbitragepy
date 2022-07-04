@@ -5,12 +5,8 @@ from arbitragepy.exceptions import (
     NotionalLessThanMinNotionalError,
     QuantityLessThanMinQuantityError,
 )
-from arbitragepy.models import (
-    ArbitragePayload,
-    ArbitrageResult,
-    OrderPayload,
-)
 from arbitragepy.fee import minus_fee
+from arbitragepy.models import ArbitragePayload, ArbitrageResult, OrderPayload
 from arbitragepy.quantity_increment import (
     to_compatible_quantity_increment,
     validate_quantity_increments,

@@ -8,9 +8,9 @@ from arbitragepy.fee import minus_fee, plus_fee
 from arbitragepy.models import (
     ArbitragePayload,
     ArbitrageResult,
-    SymbolInfo,
     OrderInfo,
     OrderPayload,
+    SymbolInfo,
 )
 from arbitragepy.quantity_increment import (
     is_compatible_quantity_increments,
@@ -18,7 +18,6 @@ from arbitragepy.quantity_increment import (
     validate_quantity_increments,
 )
 from arbitragepy.spread import get_spread
-
 
 __all__ = [
     "arbitrage",
