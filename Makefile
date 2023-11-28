@@ -1,5 +1,6 @@
 fmt:
-		black arbitragepy tests
-		isort arbitragepy tests
+		ruff check arbitragepy tests --fix
+lint:
+		ruff check arbitragepy tests
 test:
 		pytest -vvv tests
