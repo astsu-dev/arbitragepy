@@ -1,5 +1,4 @@
 from decimal import Decimal
-
 from arbitragepy.enums import OrderSide
 from arbitragepy.exceptions import (
     NotionalLessThanMinNotionalError,
@@ -43,8 +42,8 @@ def arbitrage(
 
     ask_price = ask.order.price
     bid_price = bid.order.price
-    ask_fee = ask.fee
-    bid_fee = bid.fee
+    ask_fee = ask.symbol.fee
+    bid_fee = bid.symbol.fee
     ask_qty_inc = ask.symbol.quantity_increment
     bid_qty_inc = bid.symbol.quantity_increment
     ask_balance = ask.balance
@@ -123,14 +122,12 @@ def arbitrage(
         quantity=ask_quantity,
         notional_value=ask_notional_value,
         taken_fee=ask_taken_fee,
-        fee_in_base_currency=ask_fee_in_base_currency,
     )
     bid_order = OrderPayload(
         price=bid_price,
         quantity=bid_quantity,
         notional_value=bid_notional_value,
         taken_fee=bid_taken_fee,
-        fee_in_base_currency=False,
     )
     spread = get_spread(ask_notional_value, bid_notional_value)
     profit = bid_notional_value - ask_notional_value

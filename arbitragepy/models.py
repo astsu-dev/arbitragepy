@@ -13,6 +13,7 @@ class SymbolInfo:
         min_notional: min value of quantity * price. Defaults to 0.
         fee_in_base_currency: True if fee after purchase
             will be taken in the base currency. Defaults to False.
+        fee: fee in percent. Defaults to 0.
     """
 
     quantity_increment: Decimal
@@ -20,6 +21,7 @@ class SymbolInfo:
     max_quantity: Decimal = Decimal("inf")
     min_notional: Decimal = Decimal(0)
     fee_in_base_currency: bool = False
+    fee: Decimal = Decimal(0)
 
 
 @dataclass(frozen=True)
@@ -46,13 +48,11 @@ class ArbitragePayload:
         order: info about order.
         balance: if ask exchnage then balance of symbol quote currency.
             If bid exchange then balance of symbol base currency.
-        fee: fee in percent. Defaults to 0.
     """
 
     symbol: SymbolInfo
     order: OrderInfo
     balance: Decimal | None = None
-    fee: Decimal = Decimal(0)
 
 
 @dataclass(frozen=True)
@@ -72,7 +72,6 @@ class OrderPayload:
     quantity: Decimal
     notional_value: Decimal
     taken_fee: Decimal
-    fee_in_base_currency: bool
 
 
 @dataclass(frozen=True)

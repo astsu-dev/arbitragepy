@@ -2,4 +2,4 @@ import arbitragepy
 
 
 def test_version() -> None:
-    assert arbitragepy.__version__ == "2.0.0"
+    assert arbitragepy.__version__ == "3.0.0"

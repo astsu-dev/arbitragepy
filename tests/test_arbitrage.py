@@ -24,14 +24,12 @@ def test_arbitrage() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -41,14 +39,12 @@ def test_arbitrage() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.67815"),
             taken_fee=Decimal("0.52815"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("577.87155"),
             taken_fee=Decimal("0.57845"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.304980733552162123590695000"),
         profit=Decimal("49.1934"),
@@ -67,14 +63,16 @@ def test_arbitrage_with_ask_fee_in_base_currency() -> None:
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             fee_in_base_currency=True,
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(
+            quantity_increment=Decimal("0.01"),
+            fee=Decimal("0.1"),
+        ),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -84,14 +82,12 @@ def test_arbitrage_with_ask_fee_in_base_currency() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0.0503"),
-            fee_in_base_currency=True,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.24"),
             notional_value=Decimal("577.18224"),
             taken_fee=Decimal("0.57776"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.283771655779608065890372100"),
         profit=Decimal("49.03224"),
@@ -106,14 +102,12 @@ def test_arbitrage_when_bid_quantity_great_than_ask_quantity() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -123,14 +117,12 @@ def test_arbitrage_when_bid_quantity_great_than_ask_quantity() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.67815"),
             taken_fee=Decimal("0.52815"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("577.87155"),
             taken_fee=Decimal("0.57845"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.304980733552162123590695000"),
         profit=Decimal("49.1934"),
@@ -139,7 +131,9 @@ def test_arbitrage_when_bid_quantity_great_than_ask_quantity() -> None:
     assert result == expected
 
 
-def test_arbitrage_when_bid_quantity_great_than_ask_quantity_and_ask_fee_in_base_currency() -> None:
+def test_arbitrage_when_bid_quantity_great_than_ask_quantity_and_ask_fee_in_base_currency() -> (
+    None
+):
     """Should correct arbitrage with the following conditions:
     Bid order quantity great than ask order quantity.
     Ask fee in base currency.
@@ -149,14 +143,13 @@ def test_arbitrage_when_bid_quantity_great_than_ask_quantity_and_ask_fee_in_base
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             fee_in_base_currency=True,
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -166,14 +159,12 @@ def test_arbitrage_when_bid_quantity_great_than_ask_quantity_and_ask_fee_in_base
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0.0503"),
-            fee_in_base_currency=True,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.24"),
             notional_value=Decimal("577.18224"),
             taken_fee=Decimal("0.57776"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.283771655779608065890372100"),
         profit=Decimal("49.03224"),
@@ -189,16 +180,14 @@ def test_arbitrage_with_ask_balance_less_than_order_quantity() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
         balance=Decimal("200"),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
         balance=Decimal("65"),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -208,14 +197,12 @@ def test_arbitrage_with_ask_balance_less_than_order_quantity() -> None:
             quantity=Decimal("19.02"),
             notional_value=Decimal("199.90971"),
             taken_fee=Decimal("0.19971"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("19.02"),
             notional_value=Decimal("218.51127"),
             taken_fee=Decimal("0.21873"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.304980733552162123590695000"),
         profit=Decimal("18.60156"),
@@ -224,7 +211,9 @@ def test_arbitrage_with_ask_balance_less_than_order_quantity() -> None:
     assert result == expected
 
 
-def test_arbitrage_with_ask_balance_less_than_order_quantity_and_ask_fee_in_base_currency() -> None:
+def test_arbitrage_with_ask_balance_less_than_order_quantity_and_ask_fee_in_base_currency() -> (
+    None
+):
     """Should correct arbitrage with the following conditions:
     Bid order quantity less than ask order quantity.
     Ask balance less than bid balance and less than order quantity.
@@ -235,16 +224,15 @@ def test_arbitrage_with_ask_balance_less_than_order_quantity_and_ask_fee_in_base
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             fee_in_base_currency=True,
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
         balance=Decimal("200"),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
         balance=Decimal("65"),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -254,14 +242,12 @@ def test_arbitrage_with_ask_balance_less_than_order_quantity_and_ask_fee_in_base
             quantity=Decimal("19.04"),
             notional_value=Decimal("199.92"),
             taken_fee=Decimal("0.01904"),
-            fee_in_base_currency=True,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("19.02"),
             notional_value=Decimal("218.51127"),
             taken_fee=Decimal("0.21873"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.299354741896758703481392600"),
         profit=Decimal("18.59127"),
@@ -277,16 +263,14 @@ def test_arbitrage_with_balances_great_than_order_quantity() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
         balance=Decimal("2000"),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
         balance=Decimal("650"),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -296,14 +280,12 @@ def test_arbitrage_with_balances_great_than_order_quantity() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.67815"),
             taken_fee=Decimal("0.52815"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("577.87155"),
             taken_fee=Decimal("0.57845"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.304980733552162123590695000"),
         profit=Decimal("49.1934"),
@@ -312,7 +294,9 @@ def test_arbitrage_with_balances_great_than_order_quantity() -> None:
     assert result == expected
 
 
-def test_arbitrage_with_balances_great_than_order_quantity_and_ask_fee_in_base_currency() -> None:
+def test_arbitrage_with_balances_great_than_order_quantity_and_ask_fee_in_base_currency() -> (
+    None
+):
     """Should correct arbitrage with the following conditions:
     Bid order quantity less than ask order quantity.
     Balances great than order quantity.
@@ -323,16 +307,15 @@ def test_arbitrage_with_balances_great_than_order_quantity_and_ask_fee_in_base_c
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             fee_in_base_currency=True,
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
         balance=Decimal("2000"),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
         balance=Decimal("650"),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -342,14 +325,12 @@ def test_arbitrage_with_balances_great_than_order_quantity_and_ask_fee_in_base_c
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0.0503"),
-            fee_in_base_currency=True,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.24"),
             notional_value=Decimal("577.18224"),
             taken_fee=Decimal("0.57776"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.283771655779608065890372100"),
         profit=Decimal("49.03224"),
@@ -365,14 +346,12 @@ def test_arbitrage_with_different_quantity_increments() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.1")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.1"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.35")),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid)
@@ -382,14 +361,12 @@ def test_arbitrage_with_different_quantity_increments() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.67815"),
             taken_fee=Decimal("0.52815"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("577.87155"),
             taken_fee=Decimal("0.57845"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.304980733552162123590695000"),
         profit=Decimal("49.1934"),
@@ -405,14 +382,12 @@ def test_arbitrage_dont_make_compatible_quantity_increments() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.03")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.03"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.1")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.1"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     result = arbitrage(ask=ask, bid=bid, make_compatible_quantity_increments=False)
@@ -422,14 +397,12 @@ def test_arbitrage_dont_make_compatible_quantity_increments() -> None:
             quantity=Decimal("50.28"),
             notional_value=Decimal("528.46794"),
             taken_fee=Decimal("0.52794"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("577.87155"),
             taken_fee=Decimal("0.57845"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.348459246174895680521319800"),
         profit=Decimal("49.40361"),
@@ -438,21 +411,21 @@ def test_arbitrage_dont_make_compatible_quantity_increments() -> None:
     assert result == expected
 
 
-def test_arbitrage_make_compatible_quantity_increments_with_imcompatible_increments() -> None:
+def test_arbitrage_make_compatible_quantity_increments_with_imcompatible_increments() -> (
+    None
+):
     """Should raise `ImcompatibleQuantityIncrementsError`.
     Bid order quantity less than ask order quantity.
     Different and imcompatible quantity increments. Make compatible.
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.03")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.03"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.1")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.1"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     with pytest.raises(ImcompabileQuantityIncrementsError):
@@ -468,14 +441,13 @@ def test_arbitrage_when_ask_quantity_less_than_min_quantity() -> None:
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             min_quantity=Decimal("100"),
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     with pytest.raises(QuantityLessThanMinQuantityError) as exc_info:
@@ -493,17 +465,16 @@ def test_arbitrage_when_bid_quantity_less_than_min_quantity() -> None:
     """
 
     ask = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             min_quantity=Decimal("100"),
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     with pytest.raises(QuantityLessThanMinQuantityError) as exc_info:
@@ -524,14 +495,13 @@ def test_arbitrage_when_ask_notional_less_than_min_notional() -> None:
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             min_notional=Decimal("10000"),
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
-        symbol=SymbolInfo(quantity_increment=Decimal("0.01")),
+        symbol=SymbolInfo(quantity_increment=Decimal("0.01"), fee=Decimal("0.1")),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     with pytest.raises(NotionalLessThanMinNotionalError) as exc_info:
@@ -551,17 +521,17 @@ def test_arbitrage_when_bid_notional_less_than_min_notional() -> None:
     ask = ArbitragePayload(
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("10.5"), quantity=Decimal("100.15")),
-        fee=Decimal("0.1"),
     )
     bid = ArbitragePayload(
         symbol=SymbolInfo(
             quantity_increment=Decimal("0.01"),
             min_notional=Decimal("10000"),
+            fee=Decimal("0.1"),
         ),
         order=OrderInfo(price=Decimal("11.5"), quantity=Decimal("50.3")),
-        fee=Decimal("0.1"),
     )
 
     with pytest.raises(NotionalLessThanMinNotionalError) as exc_info:
@@ -595,14 +565,12 @@ def test_arbitrage_with_zero_fee() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("578.45"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.523809523809523809523809500"),
         profit=Decimal("50.3"),
@@ -635,14 +603,12 @@ def test_arbitrage_with_ask_max_quantity() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("578.45"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.523809523809523809523809500"),
         profit=Decimal("50.3"),
@@ -675,14 +641,12 @@ def test_arbitrage_with_bid_max_quantity() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("578.45"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.523809523809523809523809500"),
         profit=Decimal("50.3"),
@@ -717,14 +681,12 @@ def test_arbitrage_with_ask_and_bid_max_quantity() -> None:
             quantity=Decimal("50.3"),
             notional_value=Decimal("528.15"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         bid_order=OrderPayload(
             price=Decimal("11.5"),
             quantity=Decimal("50.3"),
             notional_value=Decimal("578.45"),
             taken_fee=Decimal("0"),
-            fee_in_base_currency=False,
         ),
         spread=Decimal("9.523809523809523809523809500"),
         profit=Decimal("50.3"),
